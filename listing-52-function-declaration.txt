@@ -1,0 +1,20 @@
+FunctionDecl = "func" FunctionName Signature [ FunctionBody ] .
+FunctionName = identifier .
+FunctionBody = Block .
+
+Signature      = Parameters [ Result ] .
+Result         = Parameters | Type .
+Parameters     = "(" [ ParameterList [ "," ] ] ")" .
+ParameterList  = ParameterDecl { "," ParameterDecl } .
+ParameterDecl  = [ IdentifierList ] [ "..." ] Type .
+
+func add(x int, y int) int {
+	return x + y
+}
+
+func min(x int, y int) int {
+	if x < y {
+		return x
+	}
+	return y
+}

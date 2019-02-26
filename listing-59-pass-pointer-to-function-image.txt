@@ -1,0 +1,17 @@
+func double(x int) {		main()		double(x)
+	x *= 2                  +-------+	+-------+
+} 	                  	| x = 3 |	| x = 3 |
+func main () {          	+-------+	+-------+
+	x := 3                  | x = 3 |	| x = 6 |
+	double(x)               +-------+	+-------+
+	fmt.Println(x)
+}
+
+func double(px *int) {		main()                  double(px)
+	*px *= 2                +-------+               +------------+
+} 	                  	| x = 3 | 0x1000        | px = 0x1000|
+func main () {          	+-------+               +------------+
+	x := 3                  | x = 3 |
+	double(&x)              +-------+
+	fmt.Println(x)
+}

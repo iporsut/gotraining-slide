@@ -1,0 +1,21 @@
+// BEGIN GRAMMAR OMIT
+IfStmt = "if" [ SimpleStmt ";" ] Expression Block [ "else" ( IfStmt | Block ) ] .
+// END GRAMMAR OMIT
+
+// BEGIN EXAMPLE1 OMIT
+if x > max {
+	x = max
+}
+// END EXAMPLE1 OMIT
+
+// BEGIN EXAMPLE2 OMIT
+if x := f(); x < y {
+	return x
+} else if x > z {
+	return z
+} else {
+	return y
+}
+// END EXAMPLE2 OMIT
+
+* FizzBuzz v2

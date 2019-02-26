@@ -1,0 +1,568 @@
+Essential Go Programming
+
+วีรศักดิ์ ช่องงูเหลือม
+Senior Software Developer
+singpor@gmail.com
+https://medium.com/@iPorsut/
+@iporsut
+
+* Hello World & String
+
+.play -numbers -edit listing-1-hello-world.go
+
+* Variable
+
+.play -edit listing-2-variable.go
+
+* Variable Short Decralation
+
+.play -edit listing-3-variable.go
+
+* Number
+
+.play -edit listing-4-number.go /^func main/,/^}/
+
+* Number Operator
+
+.play -edit listing-5-operator.go /^func main/,/^}/
+
+* Boolean Operator
+
+.play -edit listing-6-operator.go /^func main/,/^}/
+
+* FizzBuzz
+
+.play -edit listing-7-fizzbuzz.go /^func main/,/^}/
+
+.link https://play.golang.org/p/ok3sbKoBawn Full Source Code
+
+* If systax
+
+.code listing-8-if-syntax.txt /BEGIN GRAMMAR OMIT/,/END GRAMMAR OMIT/
+
+.code listing-8-if-syntax.txt /BEGIN EXAMPLE1 OMIT/,/END EXAMPLE1 OMIT/
+
+.code listing-8-if-syntax.txt /BEGIN EXAMPLE2 OMIT/,/END EXAMPLE2 OMIT/
+
+* FizzBuzz v2
+
+.play -edit listing-9-fizzbuzz-v2.go /^func main/,/^}/
+
+* Switch case syntax
+
+.code listing-10-switch-syntax.txt /BEGIN GRAMMAR OMIT/,/END GRAMMAR OMIT/
+
+.code listing-10-switch-syntax.txt /BEGIN EXAMPLE1 OMIT/,/END EXAMPLE1 OMIT/
+
+* Binary Expression Eval #1
+
+.code listing-11-switch-example.go /^\tswitch/,/^\t}/
+.play -edit listing-11-switch-example.go /^func main/,/^}/
+.link https://play.golang.org/p/DVSsrWMlQVc Full Source Code
+
+* Binary Expression Eval #2
+
+.code listing-12-switch-example.go /^\tswitch/,/^\t}/
+.play -edit listing-12-switch-example.go /^func main/,/^}/
+.link https://play.golang.org/p/-uwl25bPlQk Full Source Code
+
+* For Loop
+
+.code listing-13-for-loop-syntax.txt
+
+* Simple Counter Loop
+
+.play -edit listing-14-counter-loop.go
+
+* Only Condition Loop
+
+.play -edit listing-15-condition-loop.go
+
+* Infinity Loop
+
+.play -edit listing-16-infinity-loop.go
+
+* Array (Fix Size List)
+
+.code listing-17-array-image.txt
+
+* Array Variable Fix Size
+
+.play -edit listing-18-array-fix-size.go
+
+* Array Variable Copy Value
+
+.play -edit listing-19-array-copy-value.go
+
+* Array Length
+
+.play -edit listing-20-array-length.go
+
+* Array Loop Counter Index
+
+.play -edit listing-21-array-loop-counter.go
+
+* Array Loop Range Index
+
+.play -edit listing-22-array-loop-range-index.go
+
+* Array Loop Range Index, Value
+
+.play -edit listing-23-array-loop-range-index-value.go
+
+* Array Loop Range Value
+
+.play -edit listing-24-array-loop-range-value.go
+
+* Slice (Dynamic Size List)
+
+.code listing-25-slice-image.txt
+
+* Make Slice
+
+.code listing-26-make-slice-image.txt
+
+* Slice Indexing Panic
+
+.play -edit listing-27-slice-indexing.go
+
+* Slice Copy Len, Cap, Data Pointer but Shared Underlying Array #1
+
+.code listing-28-slice-shared-underlying-array-image.txt
+
+* Slice Copy Len, Cap, Data Pointer but Shared Underlying Array #2
+
+.play -edit listing-29-slice-shared-underlying-array.go
+
+* Slicing Operator #1
+
+.code listing-30-slicing-operator-image.txt /BEGIN SLICE IMAGE 1 OMIT/,/END SLICE IMAGE 1 OMIT/
+
+* Slicing Operator #2
+
+.code listing-30-slicing-operator-image.txt /BEGIN SLICE IMAGE 2 OMIT/,/END SLICE IMAGE 2 OMIT/
+
+* Slicing Operator #3
+
+.code listing-30-slicing-operator-image.txt /BEGIN SLICE IMAGE 3 OMIT/,/END SLICE IMAGE 3 OMIT/
+
+* Slicing Operator #4
+
+.code listing-30-slicing-operator-image.txt /BEGIN SLICE IMAGE 4 OMIT/,/END SLICE IMAGE 4 OMIT/
+
+* Slicing Operator #5
+
+.play -edit listing-31-slicing-operator.go
+
+* Slicing Array #1
+
+.code listing-32-slicing-array-image.txt
+
+* Slicing Array #2
+
+.play -edit listing-33-slicing-array.go
+
+* Append Slice #1
+
+.code listing-34-append-slice-image.txt /BEGIN APPEND 1 OMIT/,/END APPEND 1 OMIT/
+
+* Append Slice #2
+
+.code listing-34-append-slice-image.txt /BEGIN APPEND 2 OMIT/,/END APPEND 2 OMIT/
+
+* Append Slice #3
+
+.play -edit listing-35-append-slice.go
+
+* Copy Slice Element
+
+.play -edit listing-36-copy-slice-element.go
+
+* Sorting Slice
+
+.play -edit listing-37-sorting-slice.go
+
+* Rune, Byte, Unicode and UTF-8 #1
+
+Unicode คือรหัสมาตรฐานในการแสดงตัวอักษรของภาษา และ สัญลักษณ์ ต่างๆ บนโลกนี้ ซึ่งเยอะมากๆ รวมทั้งพวก emoji ด้วย เช่น
+
+a = U+0061
+ก = U+0E01
+
+บางสัญลักษณ์ เกิดจากการผสมหลาย Unicode code point เข้าด้วยกัน เช่น
+
+👨‍👩‍👦‍👦 = U+1F468 U+200D U+1F469 U+200D U+1F466 U+200D U+1F466
+
+* Rune, Byte, Unicode and UTF-8 #2
+
+Rune คือ type ที่เก็บ Unicode code point ซึ่งจริงๆแล้วก็เป็นจำนวนเต็มขนาด 32 bits (int32)
+
+เราสามารถใช้ single quote ครอบสัญลักษณ์ เพื่อให้ได้ค่า rune (unicode code point) ออกมาได้เช่น
+
+.play -edit listing-38-rune.go
+
+* Rune, Byte, Unicode and UTF-8 #3
+
+UTF-8 คือการเอา Unicode code point มาเข้ารหัสอีกครั้งนึง ทำให้ประหยัดเนื้อที่ในการเก็บข้อมูลมากขึ้น จะเห็นว่า Unicode code point ใช้ int32 เสมอ ในขณะที่ UTF-8 จะเข้ารหัสทำให้บางช่วงของสัญลักษณ์ใช้แค่ 1 byte (uint8, 8 bits) ในการเก็บแทนที่จะเป็น 32 bit เช่น
+
+a ใช้ 1 byte คือ 0x61 (97) - 8 bits
+ก ใช้ 3 bytes คือ 0xE0 0xB8 0x81 (224 184 129) - 24 bits
+
+สำหรับ Go ข้อมูลจำนวนเต็ม 1 byte จะใช้ type ที่ชื่อว่า byte ในการจัดเก็บ เช่น
+
+.play -edit listing-39-byte.go
+
+* String is UTF-8 format
+
+String type เก็บเป็น UTF-8 format ในรูปแบบของ type []byte เราสามารถ convert เป็น []byte ได้
+และ แปลงจาก []byte กลับมาเป็น string ได้ เช่น
+
+.play -edit listing-40-string-byte.go
+
+* String convert to rune's slice
+
+เราสามารถ convert จาก string ไปเป็น slice ของ rune ได้เช่นกัน เช่น
+
+.play -edit listing-41-string-rune.go
+
+* String length is length of byte
+
+ถ้าใช้ len กับ string จะนับจำนวน byte ในรูปแบบ UTF-8 ไม่ได้นับตัวอักษร แต่ถ้าอยากนับจำนวน rune หรือ unicode code point ให้ใช้ package unicode/utf8 ช่วย เช่น
+
+.play -edit listing-42-string-count.go
+
+
+* String Loop Counter Index
+
+.play -edit listing-43-string-loop-counter.go
+
+* String Range Loop
+
+.play -edit listing-44-string-range-loop.go
+
+* Map
+
+เป็น data type ที่เราสามารถเก็บข้อมูลโดยการจับคู่ระหว่าง key กับ value เช่น
+
+"name" : "Weerasak"
+"job"  : "Senior Software Developer"
+
+* Make map
+ถ้าเราประกาศตัวแปร map เฉยๆค่าจะเป็น nil เหมือนกับ slice เราสามารถสร้างค่า map ได้โดยใช้ make หรือ กำหนดค่า map เริ่มต้นลงไป เช่น
+
+.play -edit listing-45-map.go /^func main/,/^}/
+
+* Word Count
+
+ตัวอย่างประยุกต์ใช้ map สร้างโปรแกรมนับคำ
+
+.play -edit listing-46-map-word-count.go /^func wordCount/,/^}/
+
+.link https://play.golang.org/p/a_ps6icySr6 Full Source Code
+
+* Check is key exists?
+
+.play listing-47-key-exists.go
+
+* JSON with Map and Slice
+
+.play -edit listing-48-json-map-slice.go /^func main/,/^}/
+.link https://play.golang.org/p/TmemsUGXRz7 Full Source Code
+
+* Struct and New Name Type #1
+
+.code listing-49-struct-image.txt /BEGIN STRUCT 1 OMIT/,/END STRUCT 1 OMIT/
+
+* Struct and New Name Type #2
+
+.code listing-49-struct-image.txt /BEGIN STRUCT 2 OMIT/,/END STRUCT 2 OMIT/
+
+* Struct and New Name Type #3
+
+.play -edit listing-50-struct.go /^func main/,/^}/
+.link https://play.golang.org/p/wPp_43Mk8sp Full Source Code
+
+* Sorting Slice of Customer Struct #1
+
+.play -edit listing-51-sort-slice-struct.go /BEGIN DATA OMIT/,/END DATA OMIT/
+
+* Sorting Slice of Customer Struct #2
+
+.play -edit listing-51-sort-slice-struct.go /BEGIN SORT OMIT/,/END SORT OMIT/
+.link https://play.golang.org/p/w5ahxlaIb_p Full Source Code
+
+* Function Declaration
+
+.code -edit listing-52-function-declaration.txt
+
+* Multiple Return Type
+
+.play -edit listing-53-multiple-return-type.go /^func parseToken/,/^}/
+
+* Named Return Type
+
+.play -edit listing-54-named-return-type.go /^func parseToken/,/^}/
+
+* Local Scope and Stack Frame #1
+
+.code listing-55-local-scope-stack-frame.txt /BEGIN STACK 1 OMIT/,/END STACK 1 OMIT/
+
+* Local Scope and Stack Frame #2
+
+.code listing-55-local-scope-stack-frame.txt /BEGIN STACK 2 OMIT/,/END STACK 2 OMIT/
+
+* Local Scope and Stack Frame #3
+
+.play -edit listing-56-local-scope-stack-frame.go
+
+* Pointer
+
+Pointer คือ ตัวแปรที่เก็บหมายเลขตำแหน่งหน่วยความจำ
+
+.code listing-57-pointer-image.txt
+
+* Indirection Operator
+
+ถ้าเรามีตัวแปร Pointer เราสามารถจัดการค่าที่อยู่ที่ address นั้นที่เราเก็บไว้ได้ผ่านทาง indirection operator เช่น
+
+.play -edit listing-58-pointer-indirection-operator.go /^func main/,/^}/
+
+* Pass pointer to function #1
+
+เรารู้ไปแล้วว่าแต่ละ function มี stack frame เก็บ local variable และ ตัวแปร argument ของตัวเอง
+เวลาส่งค่าจะเป็นการ copy value ให้ตัวแปร argument ดังนั้นถ้าเราอยากให้ callee function เปลี่ยนค่าตัวแปรใน
+scope ของ caller ได้เราจะใช้ pointer ช่วย
+
+* Pass pointer to function #2
+
+.code listing-59-pass-pointer-to-function-image.txt
+
+* Pass slice to function
+
+slice นั้น copy value เหมือนกันแต่เนื่องจากว่าโครงสร้างภายในมี pointer ที่ชี้ไปที่ underlying array ทำให้การแก้ไขค่าภายใน array เดียวกัน จะยังคงมีผลกระทบกับ slice อื่นที่ใช้ array เดียวกัน เช่น
+
+.play -edit listing-81-pass-slice-to-function.go
+
+* Pass map to function
+
+map นั้น copy value เหมือนกัน แต่โครงสร้างของ map ก็เหมือนกับ pointer คือ copy address ไปหาโครงสร้างข้อมูลที่อยู่ที่ heap อีกที่นึงทำให้การแก้ไขค่าใน map มีผลกระทบกับ map ที่ส่งเข้ามาที่ฟังก์ชันด้วย เช่น
+
+.play -edit listing-82-pass-map-to-function.go
+
+* Stack and Heap #1
+
+นอกจาก Stack ที่เป็น memory ภายใน local scope ของฟังก์ชันแล้ว ยังมี memory อีกส่วนที่เรียกว่า Heap ที่อยู่นอกเหนือจาก scope ของ function
+
+เราไม่สามารถควบคุมการสร้างข้อมูลภายใน Heap ได้โดยตรงด้วย Go แต่ Compiler จะมีวิธีการวิเคราะห์จากโค้ดเราเองว่าควรจะย้ายไปเก็บใน Heap แทน Stack หรือไม่
+
+* Stack and Heap #2
+
+.play -edit listing-60-function-return-pointer-move-to-heap.go /BEGIN NEW CUSTOMER OMIT/,/END NEW CUSTOMER OMIT/
+
+* Stack and Heap #3
+
+.code listing-61-function-return-pointer-move-to-heap-image.txt
+ตัวแปรใน Heap เมื่อไม่มี pointer ใน Stack ชี้ไปถึงแล้วจะถูก Garbage Collector ตามมากวาดคืนให้ระบบทีหลังเอง ไม่ต้องคืนหน่วยความจำเอง
+
+* new function
+
+.play -edit listing-62-new-pointer-function.go
+
+* Function Variable / Function is value #1
+
+เราสามารถเอาฟังก์ชันเก็บไว้ในตัวแปร หรือส่งค่า function ผ่านเป็น argument ไปให้ฟังก์ชันอื่นได้ เช่น
+
+.play -edit listing-63-function-variable.go
+
+* Function Variable / Function is value #2
+
+.play -edit listing-64-function-pass-to-function.go
+
+* Function Variable / Function is value #3
+
+.play -edit listing-65-return-function.go /BEGIN SELECT OP OMIT/,/END SELECT OP OMIT/
+.link https://play.golang.org/p/yoNVir-LWjC Full Source Code
+
+* Function Variable / Function is value #4
+
+.play -edit listing-66-map-string-function.go /BEGIN MAP FUNC OMIT/,/END MAP FUNC OMIT/
+.link https://play.golang.org/p/maLIrCaQWlF Full Source Code
+
+* Anonymous Function #1
+
+คือสร้าง function ตรงจุดที่จะใช้เลยไม่ต้อง define ภายใน package เอาไว้ก่อน เช่น
+
+.play -edit listing-67-anon-function.go
+
+* Anonymous Function #2
+
+.play -edit listing-68-anon-function.go
+
+* Closure Scope #1
+
+Anonymous function จะมองเห็นตัวแปรที่ประกาศไว้ใน scope ของ function ที่มันถูกสร้างขึ้น เช่น
+
+.play -edit listing-69-closure-scope.go
+
+* Closure Scope #2
+
+.play -edit listing-70-closure-scope.go
+
+* Defer #1
+
+ปกติเวลาเราเรียกใช้ฟังก์ชัน การทำงานจะทำ function นั้นทันทีแล้วค่อยไปทำคำสั่งถัดไป แต่ defer คือกลไกที่เราจะเรียกฟังก์ชัน แต่ยังไม่ถูกทำงานทันที
+แต่จะทำหลังจาก caller function จบการทำงาน เช่น
+
+.play -edit listing-71-defer.go
+
+* Defer #2
+
+เรามักเห็นโค้ดการใช้ defer เพื่อทำการคืน resource ของการติดต่อ IO เช่น close file/network/db หลังจากเปิดใช้งานหรือ connect
+.play -edit listing-72-defer.go /^func main/,/^}/
+
+* Panic
+
+เมื่อเกิด panic ขึ้น จะทำให้ฟังก์ชันหยุดการทำงานแล้ว แล้ว call stack จะ pop panic ขึ้นไปเรื่อยๆจนจบโปรแกรม
+
+* Recover
+
+recover คือกลไกที่ทำให้เราดักจับ panic ที่เกิดขึ้นแล้วทำให้ panic ไม่ pop ไปที่ call stack ถัดไป ซึ่งการเขียนโค้ด recover ต้องถูกเรียกใช้ภายใต้ defer เท่านั้น
+
+.play -edit listing-73-recover-panic.go
+
+* New Named Type #1
+
+เราได้เห็นตัวอย่างการสร้าง type ใหม่โดยโครงสร้างเป็นแบบ struct (type Customer struct) กันไปแล้ว และเห็นการสร้าง alias name ให้กับ type กันไปแล้ว (type satang=int) สำหรับ Go เราสร้าง type ชื่อใหม่ จาก type ประเภทอื่นได้ ไม่ได้จำกันแค่ struct เช่น
+.play -edit listing-74-named-type.go
+
+* New Named Type #2
+
+.play -edit listing-75-named-type.go /^func main/,/^}/
+
+* Constant #1
+
+Go สามารถประการศ constant ได้สำหรับ boolean, rune, integer, floating-point, complex และ string โดยใช้ keyword const เช่น
+
+.play -edit listing-76-const-type.go
+
+* Constant #2
+
+.play -edit listing-77-const-type.go
+
+* Method #1
+
+ในภาษาแบบ Object Oriented เช่นภาษา Java นั้น Method เป็นพฤติกรรมของ Object ที่ต้องถูกสร้างตอนสร้าง Class ของ Object
+
+แต่สำหรับ Go ไม่มี concept การสร้างคลาส มีแต่ concept การสร้าง type ใหม่ซึ่งเราสามารถสร้าง Method ให้กับ type ใหม่ที่เราสร้างขึ้นได้
+
+* Method #2
+
+.play -edit listing-78-method.go
+
+* Method #3
+
+.play -edit listing-79-method.go
+
+* Pointer Receiver #1
+
+ตรงส่วนของตัวแปร Receiver เรากำหนด type เป็น type ปกติ ซึ่งกลไกการผ่านค่าของ object ที่เรียก method ไปให้ตัวแปร receiver นั้นก็เหมือนกับผ่านค่า argument ไปให้ตัว function คือจะ copy จาก stack frame ของ caller ไปที่ stack frame ของ callee
+
+ผลคือเราแก้ไขค่าอะไรของตัวแปร receiver จะไม่กระทบกับตัวแปรที่เรียก method นี้มา เพราะมันเป็นการ copy ค่ามา เป็นคนละตัวกัน
+
+ถ้าอยากให้มีผลกระทบต้องใช้ type ของ receiver เป็น pointer
+
+* Pointer Receiver #2
+
+.play -edit listing-80-pointer-receiver.go
+
+* Method Caller Type
+
+ตัวแปรจะเป็น value ธรรมดา หรือ pointer ก็สามารถเรียก method ได้ไม่ต่างกัน
+
+.play -edit listing-83-caller-method.go
+
+* Interface
+
+Interface เป็น type ที่กำหนด set ของ method ในขณะที่ type ที่ผ่านๆมาเป็นการกำหนดโครงสร้างของข้อมูล ส่วนค่าที่เรากำหนดให้กับตัวแปรของ interface ได้ คือค่าของ type ใดๆที่ implement interface
+
+* Implement Interface
+
+.play -edit listing-84-implement-interface.go
+
+* Method Set #1
+
+สำหรับ value ของ type จะนับแค่ value receiver เป็น method set เท่านั้น แต่ pointer type จะนับทั้ง value และ pointer receiver
+
+.play -edit listing-85-method-set.go
+
+* Method Set #2
+
+.play -edit listing-86-method-set-2.go
+
+* Empty interface #1
+
+Empty interface ก็คือ type interface ที่ไม่มี method ระบุเอาไว้เลย ทำให้เรากำหนดค่าอะไรให้ตัวแปรของ empty interface ก็ได้เพราะถือว่าทุก type implement empty interface
+
+* Empty interface #2
+
+.play -edit listing-87-empty-interface.go
+
+* Type Assertion
+
+Type assertion เป็นวิธีที่ช่วยให้เราเช็คว่าตัวแปร interface ของเราจริงๆแล้วเป็น type ไหน หรือ implement interface อื่นอยู่หรือไม่เช่น
+
+.play -edit listing-88-type-assertion.go
+
+* Type Switch
+
+Type switch โครงสร้างแบบ switch case แต่แทนที่จะเลือกตาม value แต่เป็นเลือกตาม type แทน เช่น
+
+.play -edit listing-89-type-switch.go
+
+* Error interface #1
+
+เราได้เห็นกันมาบ้างแล้วว่า function ไหนของ Go ที่มีโอกาสเกิดข้อผิดพลาด จะรายงานข้อผิดพลาดออกมาทาง return value ที่มี type เป็น error ซึ่ง type นี้เป็น interface type เช่น
+
+.code listing-91-error-interface.go
+
+.play -edit listing-90-error-value.go
+
+* Error interface #2
+
+เราสามารถสร้าง error value ใหม่ง่ายได้โดยใช้ errors.New หรือ fmt.Errorf ช่วย ถ้าต้องการซับซ้อนกว่านี้เราสามารถ implement interface Error เองได้
+
+.play -edit listing-92-error-value.go
+
+* Error interface #3
+
+.play -edit listing-93-error-value.go
+
+* Package #1
+
+จากที่เราเขียนกันมาจะเห็นว่าเราสร้างโปรแกรมโดยโปรแกรมเริ่มทำงานที่ func main ที่สร้างไว้ใน package ที่ชื่อ main ซึ่งเป็นข้อกำหนดของภาษาเลยว่าโปรแกรมจะถูก build และ run ได้ต้องมี package main และ func main อยู่
+
+แต่เราสามารถสร้าง package ชื่ออื่นเพื่อทำให้โค้ดเป็นระเบียบ ดูแลรักษาง่ายเมื่อมีโค้ดเยอะขึ้น และนำไป reuse กับโปรแกรมอื่นได้
+
+* Package #2
+
+.code listing-94-package-structure-example.txt
+
+git clone https://github.com/iporsut/gotraining-todoapp todoapp
+
+* Testing
+
+* Goroutine
+
+* Channel
+
+* Buffered Channel
+
+* Range and Close
+
+* Select
+
+* Default Selection
+
+* sync.Mutex
+
+* sync.WaitGroup

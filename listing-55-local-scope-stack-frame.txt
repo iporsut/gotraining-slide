@@ -1,0 +1,42 @@
+// BEGIN STACK 1 OMIT
+func add(a int, b int) int {
+	return a + b
+}
+func main() {
+	i := 10
+	j := 20
+	x := add(i, j)
+	fmt.Println(x)
+}
+	 main()        add(i,j)
+	+-------+     +-------+
+	| i = 10|     | a = 10| Go passing argument
+	+-------+     +-------+ is a pass by value
+	| j = 20|     | b = 20| from caller stack to callee stack
+	+-------+     +-------+
+	| x = 30|
+	+-------+     +-------+  after return a + b stack for
+	| i = 10|    -+-------+- add(i, j) is cleared
+	+-------+     +-------+
+	| j = 20|    -+-------+-
+	+-------+     +-------+
+// END STACK 1 OMIT
+// BEGIN STACK 2 OMIT
+func double(x int) {		main()		double(x)
+	x *= 2                  +-------+	+-------+
+} 	                  	| x = 3 |	| x = 3 |
+func main () {          	+-------+	+-------+
+	x := 3                  | x = 3 |	| x = 6 |
+	double(x)               +-------+	+-------+
+	fmt.Println(x)
+}
+
+func double(x int) int {	main()		double(x)
+	return x * 2            +-------+	+-------+
+} 	                  	| x = 3 |	| x = 3 |
+func main () {          	+-------+	+-------+
+	x := 3                  | x = 6 |
+	x = double(x)           +-------+
+	fmt.Println(x)
+}
+// END STACK 2 OMIT

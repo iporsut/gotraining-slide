@@ -1,0 +1,33 @@
+// BEGIN STRUCT 1 OMIT
+// new type alias
+type satang = int
+
+// new type underlying type is struct with 3 fields
+type Customer struct {
+	ID      int
+	Name    string
+	Balance satang
+}
+
+var c Customer
+
+c.ID    c.Name     c.Balance
++---++----------++------------+
+| 0 ||    ""    ||     0      |
++---++----------++------------+
+// END STRUCT 1 OMIT
+
+// BEGIN STRUCT 2 OMIT
+c := Customer{1, "Somrak", 100000}
+or
+c := Customer{
+	ID:      1,
+	Name:    "Somrak",
+	Balance: 100000,
+}
+
+c.ID    c.Name     c.Balance
++---++----------++------------+
+| 1 || "Somrak" ||   100000   |
++---++----------++------------+
+// END STRUCT 2 OMIT

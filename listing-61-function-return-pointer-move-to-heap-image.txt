@@ -1,0 +1,18 @@
+func NewCustomer(name string, balance satang) *Customer {
+	return &Customer{
+		ID:      1, // TODO: Auto increment ID
+		Name:    name,
+		Balance: balance,
+	} // Move to heap
+}
+
+func main() {
+	c := NewCustomer("Somrak", 100000)
+	fmt.Println(c)
+}
+
+main()		NewCustomer("Somrak", 100000)    HEAP
++-------------+                                  c.ID    c.Name     c.Balance
+| c = 0x10008 |                                  +---++----------++------------+
++-------------+                                  | 1 || "Somrak" || 100000     | 0x10008
+                                                 +---++----------++------------+

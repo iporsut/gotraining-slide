@@ -715,3 +715,7 @@ Go มี standard package ที่ชื่อว่า sync ซึ่งเ�
 * sync.WaitGroup #3
 
 .play -edit listing-107-waitgroup.go /^func main/,/^}/
+
+* Web Crawler
+
+  git clone https://github.com/iporsut/gotraining-webcrawler.git web-crawler

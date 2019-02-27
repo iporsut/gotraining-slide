@@ -11,4 +11,5 @@
 ├── go.sum
 ├── main.go
 └── todo
-    └── todo.go
+    ├── todo.go
+    └── todo_test.go

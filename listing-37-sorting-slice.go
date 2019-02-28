@@ -12,6 +12,6 @@ func main() {
 	fmt.Println(a)
 
 	a = []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
-	sort.Reverse(sort.IntSlice(a))
+	sort.Sort(sort.Reverse(sort.IntSlice(a)))
 	fmt.Println(a)
 }

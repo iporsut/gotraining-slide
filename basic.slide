@@ -673,6 +673,8 @@ channel ที่เราสร้าง เช่น ch = make(chan int) เ�
 
 .play -edit listing-104-select-channel.go /^func sender/,/^}/
 
+.link https://play.golang.org/p/gRbE6QM4LZS Full Source Code
+
 * Select #2
 
 .play -edit listing-104-select-channel.go /^func main/,/^}/

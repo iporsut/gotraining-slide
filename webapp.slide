@@ -1,0 +1,170 @@
+Web Application with Go
+
+วีรศักดิ์ ช่องงูเหลือม
+Senior Software Developer
+singpor@gmail.com
+https://medium.com/@iPorsut/
+@iporsut
+
+* Basic Web Request/Response #1
+.image web-request-header.png _ 950
+
+* Basic Web Request/Response #2
+
+.image web-request-body.png _ 950
+
+* Web Application client side
+- HTML
+- CSS
+- Javascript
+
+* Web Application server side
+- Process Request
+- Manage Data Persistant / Database
+- Call 3rd parties API
+- Response HTML/CSS/Javascript and other resource
+
+* Web Application with Go
+- net/http for process request and write response
+- database/sql and driver packages for manage database (DBMS or NOSQL)
+- net/http for calling 3rd parties API
+- html/template for rendering HTML
+
+* New go module
+  mkdir webapp
+  cd webapp
+  go mod init webapp
+
+* Hello World
+.play web-1-hello-world.go
+
+* Hello World
+.image web-hello-header.png _ 950
+
+* Hello World
+.image web-hello-body.png _ 950
+
+* Query String #1
+คือ parameter ที่ส่งผ่าน URL มาได้เช่น http://localhost:8000/hello?name=Weerasak&age=33
+
+* Query String #2
+.play web-2-hello-world.go
+
+* Render Static HTML
+.play web-3-static-html.go
+
+* POST Form Request #1
+.code web-4-html-form.html
+
+* POST Form Request #2
+.code web-5-html-form.go
+
+* HTML Template with html/template
+
+* Parse Template File #1
+  tmp/hello.tmpl.html
+.code tmpl/hello.tmpl.html
+
+* Parse Template File #2
+.code web-6-load-html-template.go /PARSE BEGIN OMIT/,/PARSE END OMIT/
+
+* Execute Template
+.code web-6-load-html-template.go /^func main/,/^}/
+
+* Loop In Template #1
+.code tmpl/list-post.tmpl.html
+
+* Loop In Template #2
+.code web-7-template-loop.go /PARSE BEGIN OMIT/,/PARSE END OMIT/
+
+* Loop In Template #3
+.code -edit web-7-template-loop.go /^func main/,/^}/
+
+* Connect DMBS with database/sql
+
+* Driver package
+package database/sql เตรียม ฟังก์ชันพื้นฐานสำหรับจัดการ SQL เอาไว้ให้แต่ว่าในการติดต่อแต่ละ DBMS ต้องการ driver package ที่ implement interface ต่างๆที่จำเป็นในการติดต่อ DBMS เอาไว้ เช่น MYSQL/MariaDB สามารถใช้ package https://github.com/go-sql-driver/mysql/ เป็น driver package ได้
+
+* CREATE DB
+ให้สร้าง Database ชื่อ blogdb ถ้าใครใช้ mysql command สามารถสร้าง database ใหม่ได้ดังนี้
+
+ใชัคำสั่ง mysql connect mysql server
+
+  mysql -u root
+
+สั่งสร้าง database ใหม่
+
+  create database blogdb;
+
+* Connect DB
+.code -edit web-8-connect-db.go
+
+* Create TABLE #1
+เราสามารถสร้าง Table posts ด้วยคำสั่ง SQL ดังนี้
+
+.code -edit web-9-create-table-posts.sql
+
+* Create TABLE #2
+นอกจากรัน SQL ผ่าน command line mysql แล้ว เราสามารถส่งคำสั่ง สร้าง table ผ่าน Go ได้ดังนี้
+
+.code -edit web-10-go-create-table-posts.go /BEGIN CREATE TABLE OMIT/,/END CREATE TABLE OMIT/
+
+* Insert Data
+.code -edit web-11-insert-posts.go /^func main/,/^}/
+
+* Update Data
+.code -edit web-12-update-posts.go /^func main/,/^}/
+
+* Query Data
+.code -edit web-13-query-posts.go /BEGIN QUERY OMIT/,/END QUERY OMIT/
+
+* Query ROW Data
+.code -edit web-13-query-posts.go /BEGIN QUERY ROW OMIT/,/END QUERY ROW OMIT/
+
+* Delete Data
+.code -edit web-14-delete-posts.go /BEGIN DELETE OMIT/,/END DELETE OMIT/
+
+* Basic Web Blog
+
+  git clone https://github.com/iporsut/gotraining-webblog-workshop
+
+* Table Post
+
+.code -edit web-9-create-table-posts.sql
+
+* Gin Framework
+- Gin เป็น framework เพื่อช่วยให้เราจัดการ HTTP Server ได้ง่ายขึ้น
+- มี Routing ที่ map path param ได้ และจัด Group ได้
+- สามารถ Binding Param, Query, Post form ได้
+- สามารถ render JSON, HTML, XML ได้ง่าย
+- มีโครงสร้าง middleware ที่สามารถเพิ่มเข้าไปให้แต่ละ route ได้
+
+* Hello Gin
+
+.play -edit web-15-hello-gin.go
+
+* Gin Context
+
+* Request / Response
+
+* JSON Marshal/Unmarshal
+
+* MongoDB
+
+* Basic CRUD
+
+* Mongo DB Driver package
+
+* TODO API
+
+* TODO DB
+
+* TODO Document
+
+* TODO List
+
+* TODO New
+
+* TODO Update
+
+* TODO Delete

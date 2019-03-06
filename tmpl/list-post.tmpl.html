@@ -1,0 +1,11 @@
+<html>
+  <head>
+    <title>List Post</title>
+  </head>
+  <body>
+    <h1>Post</h1>
+    {{range . -}}
+    <p><a href="/posts/{{.ID}}">{{.Title}}</a></p>
+    {{- end}}
+  </body>
+</html>

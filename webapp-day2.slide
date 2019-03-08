@@ -1,0 +1,273 @@
+Web Application with Go
+
+วีรศักดิ์ ช่องงูเหลือม
+Senior Software Developer
+singpor@gmail.com
+https://medium.com/@iPorsut/
+@iporsut
+
+* Basic Web Request/Response #1
+.image web-request-header.png _ 950
+
+* Basic Web Request/Response #2
+
+.image web-request-body.png _ 950
+
+* Web Application client side
+- HTML
+- CSS
+- Javascript
+
+* Web Application server side
+- Process Request
+- Manage Data Persistant / Database
+- Call 3rd parties API
+- Response HTML/CSS/Javascript and other resource
+
+* Web Application with Go
+- net/http for process request and write response
+- database/sql and driver packages for manage database (DBMS or NOSQL)
+- net/http for calling 3rd parties API
+- html/template for rendering HTML
+
+* New go module
+  mkdir webapp
+  cd webapp
+  go mod init webapp
+
+* Hello World
+.play web-1-hello-world.go
+
+* Hello World
+.image web-hello-header.png _ 950
+
+* Hello World
+.image web-hello-body.png _ 950
+
+* Query String #1
+คือ parameter ที่ส่งผ่าน URL มาได้เช่น http://localhost:8000/hello?name=Weerasak&age=33
+
+* Query String #2
+.play web-2-hello-world.go
+
+* Render Static HTML
+.play web-3-static-html.go
+
+* POST Form Request #1
+.code web-4-html-form.html
+
+* POST Form Request #2
+.code web-5-html-form.go
+
+* HTML Template with html/template
+
+* Parse Template File #1
+  tmp/hello.tmpl.html
+.code tmpl/hello.tmpl.html
+
+* Parse Template File #2
+.code web-6-load-html-template.go /PARSE BEGIN OMIT/,/PARSE END OMIT/
+
+* Execute Template
+.code web-6-load-html-template.go /^func main/,/^}/
+
+* Loop In Template #1
+.code tmpl/list-post.tmpl.html
+
+* Loop In Template #2
+.code web-7-template-loop.go /PARSE BEGIN OMIT/,/PARSE END OMIT/
+
+* Loop In Template #3
+.code -edit web-7-template-loop.go /^func main/,/^}/
+
+* Connect DMBS with database/sql
+
+* Driver package
+package database/sql เตรียม ฟังก์ชันพื้นฐานสำหรับจัดการ SQL เอาไว้ให้แต่ว่าในการติดต่อแต่ละ DBMS ต้องการ driver package ที่ implement interface ต่างๆที่จำเป็นในการติดต่อ DBMS เอาไว้ เช่น MYSQL/MariaDB สามารถใช้ package https://github.com/go-sql-driver/mysql/ เป็น driver package ได้
+
+* CREATE DB
+ให้สร้าง Database ชื่อ blogdb ถ้าใครใช้ mysql command สามารถสร้าง database ใหม่ได้ดังนี้
+
+ใชัคำสั่ง mysql connect mysql server
+
+  mysql -u root
+
+สั่งสร้าง database ใหม่
+
+  create database blogdb;
+
+* Connect DB
+.code -edit web-8-connect-db.go
+
+* Create TABLE #1
+เราสามารถสร้าง Table posts ด้วยคำสั่ง SQL ดังนี้
+
+.code -edit web-9-create-table-posts.sql
+
+* Create TABLE #2
+นอกจากรัน SQL ผ่าน command line mysql แล้ว เราสามารถส่งคำสั่ง สร้าง table ผ่าน Go ได้ดังนี้
+
+.code -edit web-10-go-create-table-posts.go /BEGIN CREATE TABLE OMIT/,/END CREATE TABLE OMIT/
+
+* Insert Data
+.code -edit web-11-insert-posts.go /^func main/,/^}/
+
+* Update Data
+.code -edit web-12-update-posts.go /^func main/,/^}/
+
+* Query Data
+.code -edit web-13-query-posts.go /BEGIN QUERY OMIT/,/END QUERY OMIT/
+
+* Query ROW Data
+.code -edit web-13-query-posts.go /BEGIN QUERY ROW OMIT/,/END QUERY ROW OMIT/
+
+* Delete Data
+.code -edit web-14-delete-posts.go /BEGIN DELETE OMIT/,/END DELETE OMIT/
+
+* Basic Web Blog
+
+  git clone https://github.com/iporsut/gotraining-webblog-workshop
+
+* Table Post
+
+.code -edit web-9-create-table-posts.sql
+
+* Gin Framework
+- Gin เป็น framework เพื่อช่วยให้เราจัดการ HTTP Server ได้ง่ายขึ้น
+- มี Routing ที่ map path param ได้ และจัด Group ได้
+- สามารถ Binding Param, Query, Post form ได้
+- สามารถ render JSON, HTML, XML ได้ง่าย
+- มีโครงสร้าง middleware ที่สามารถเพิ่มเข้าไปให้แต่ละ route ได้
+
+* Hello Gin
+
+.play -edit web-15-hello-gin.go
+
+* Gin Context
+- gin.Context ไม่ใช่ Context แบบเดียวกันกับ package context
+- gin.Context ใช้สำหรับจัดการ Reqeust/Response ของ handler
+เหมือนยุบ w,r ของ net/http มาอยู่ใน parameter เดียว
+
+* Gin Query String value
+
+.play -edit web-16-query-string.go
+
+* Gin Post value
+
+.play -edit web-17-form-value.go
+
+* Gin Path Param
+
+.play -edit web-18-path-param.go
+
+* Gin Render JSON
+
+.play -edit web-19-render-json.go
+
+* Gin Binding Value From JSON
+
+.play -edit web-20-binding-json.go
+
+* MongoDB
+- MongoDB DB แบบ Document Base
+- แต่ละ Document เป็น Object ลักษณะแบบเดียวกันกับ JSON (แต่เรียกว่า BSON มี data type เยอะกว่า)
+- Document ถูกจัดกรุ๊ปอยู่ภายใต้ collection
+- การ Query ใช้ คำสั่งที่ถูกจัดเป็น key value ของ BSON Object แทนที่ SQL
+
+* Free tier hosting
+
+https://www.clever-cloud.com/en/
+
+* Basic CRUD
+
+* Insert
+  db.tasks.insert({"desc": "Learn Go", "done": false})
+
+* Query
+  db.tasks.find()
+  db.tasks.find({"desc": "Learn Go"})
+  db.tasks.find({"done": false})
+
+* Update
+  db.tasks.update({"_id": ObjectId("5c819edc9b076e42d78deb7e")}, {"$set": {"done": true}})
+  db.tasks.update({"done": false}, {"$set": {"done": true}})
+
+* Delete
+  db.tasks.deleteOne({"_id": ObjectId("5c819edc9b076e42d78deb7e")})
+  db.tasks.deleteMany({"done": true})
+
+* Mongo DB Driver package
+
+.link https://github.com/mongodb/mongo-go-driver/ mongo-go-driver
+
+ใช้ go get เพื่อ install package เจาะจง version ได้
+( รันคำสั่งภายใน directory ของ module)
+
+  go get go.mongodb.org/mongo-driver@v1.0.0-rc2
+
+* New Connect and Ping
+.play -edit web-21-connect-ping-mongodb.go
+
+* Select DB and Collection
+  collection := client.Database("dbname").Collection("collectionname")
+
+* BSON
+Mongo driver เตรียม BSON type ไว้ให้ใช้ 4 types
+
+  bson.D // สำหรับ ordered key value เช่น
+  bson.D{{"foo", "bar"}, {"hello", "world"}, {"pi", 3.14159}}
+
+  bson.M // สำหรับ unordered key value เช่น
+  bson.M{"foo": "bar", "hello": "world", "pi": 3.14159}
+
+  bson.E // เป็น struct Key, Value ถูกใช้เป็น element ของ D
+
+  bson.A // สำหรับเป็น Array ของ bson
+  bson.A{"bar", "world", 3.14159, bson.D{{"qux", 12345}}}
+
+ที่ต้องมี type ใหม่แทน type ปกติของ Go เพราะต้อง implement method สำหรับ
+Encode/Decode BSON
+
+* Insert
+  res, err := collection.InsertOne(ctx, bson.M{"": "pi", "value": 3.14159})
+  id := res.InsertedID
+
+* Query
+ใช้ method Find ซึ่งรับ context และ bson Object สำหรับเป็นเงื่อนไข
+แล้วใช้ cursor ที่ได้มาเพื่อวนซ้ำ decode ค่าออกมาที่ละ document
+
+  cur, err = collection.Find(ctx, bson.D{})
+  check(err)
+  defer cur.Close(ctx)
+  for cur.Next(ctx) {
+    var result bson.M
+    err := cur.Decode(&result)
+    check(err)
+  }
+  check(cur.Err())
+
+* Query One
+ใช้ method FindOne ซึ่งสามารถเรียก Decode ต่อได้เลย
+
+  err := collection.FindOne(ctx, bson.D{{"done", true}}).Decode(&result)
+  check(err)
+
+* Update
+ใช้ method UpdateOne หรือ UpdateMany
+
+  result, err := collection.UpdateMany(ctx, bson.D{{"done", false}},
+                                        bson.D{
+                                          {"$set",
+                                            bson.D{
+                                              {"done", true},
+                                            },
+                                          }
+                                        })
+
+* Delete
+ใช้ method DeleteOne หรือ DeleteMany
+  result, err := collection.UpdateMany(ctx, bson.D{{"done", true}})
+
+
+* Todo API LAB
+  git clone https://github.com/iporsut/gotraining-todoapi-workshop

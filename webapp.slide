@@ -144,27 +144,129 @@ package database/sql เตรียม ฟังก์ชันพื้นฐ�
 .play -edit web-15-hello-gin.go
 
 * Gin Context
+- gin.Context ไม่ใช่ Context แบบเดียวกันกับ package context
+- gin.Context ใช้สำหรับจัดการ Reqeust/Response ของ handler
+เหมือนยุบ w,r ของ net/http มาอยู่ใน parameter เดียว
 
-* Request / Response
+* Gin Query String value
 
-* JSON Marshal/Unmarshal
+.play -edit web-16-query-string.go
+
+* Gin Post value
+
+.play -edit web-17-form-value.go
+
+* Gin Path Param
+
+.play -edit web-18-path-param.go
+
+* Gin Render JSON
+
+.play -edit web-19-render-json.go
+
+* Gin Binding Value From JSON
+
+.play -edit web-20-binding-json.go
 
 * MongoDB
+- MongoDB DB แบบ Document Base
+- แต่ละ Document เป็น Object ลักษณะแบบเดียวกันกับ JSON (แต่เรียกว่า BSON มี data type เยอะกว่า)
+- Document ถูกจัดกรุ๊ปอยู่ภายใต้ collection
+- การ Query ใช้ คำสั่งที่ถูกจัดเป็น key value ของ BSON Object แทนที่ SQL
+
+* Free tier hosting
+
+https://www.clever-cloud.com/en/
 
 * Basic CRUD
 
+* Insert
+  db.tasks.insert({"desc": "Learn Go", "done": false})
+
+* Query
+  db.tasks.find()
+  db.tasks.find({"desc": "Learn Go"})
+  db.tasks.find({"done": false})
+
+* Update
+  db.tasks.update({"_id": ObjectId("5c819edc9b076e42d78deb7e")}, {"$set": {"done": true}})
+  db.tasks.update({"done": false}, {"$set": {"done": true}})
+
+* Delete
+  db.tasks.deleteOne({"_id": ObjectId("5c819edc9b076e42d78deb7e")})
+  db.tasks.deleteMany({"done": true})
+
 * Mongo DB Driver package
 
-* TODO API
+.link https://github.com/mongodb/mongo-go-driver/ mongo-go-driver
 
-* TODO DB
+ใช้ go get เพื่อ install package เจาะจง version ได้
+( รันคำสั่งภายใน directory ของ module)
 
-* TODO Document
+  go get go.mongodb.org/mongo-driver@v1.0.0-rc2
 
-* TODO List
+* New Connect and Ping
+.play -edit web-21-connect-ping-mongodb.go
 
-* TODO New
+* Select DB and Collection
+  collection := client.Database("dbname").Collection("collectionname")
 
-* TODO Update
+* BSON
+Mongo driver เตรียม BSON type ไว้ให้ใช้ 4 types
 
-* TODO Delete
+  bson.D // สำหรับ ordered key value เช่น
+  bson.D{{"foo", "bar"}, {"hello", "world"}, {"pi", 3.14159}}
+
+  bson.M // สำหรับ unordered key value เช่น
+  bson.M{"foo": "bar", "hello": "world", "pi": 3.14159}
+
+  bson.E // เป็น struct Key, Value ถูกใช้เป็น element ของ D
+
+  bson.A // สำหรับเป็น Array ของ bson
+  bson.A{"bar", "world", 3.14159, bson.D{{"qux", 12345}}}
+
+ที่ต้องมี type ใหม่แทน type ปกติของ Go เพราะต้อง implement method สำหรับ
+Encode/Decode BSON
+
+* Insert
+  res, err := collection.InsertOne(ctx, bson.M{"": "pi", "value": 3.14159})
+  id := res.InsertedID
+
+* Query
+ใช้ method Find ซึ่งรับ context และ bson Object สำหรับเป็นเงื่อนไข
+แล้วใช้ cursor ที่ได้มาเพื่อวนซ้ำ decode ค่าออกมาที่ละ document
+
+  cur, err = collection.Find(ctx, bson.D{})
+  check(err)
+  defer cur.Close(ctx)
+  for cur.Next(ctx) {
+    var result bson.M
+    err := cur.Decode(&result)
+    check(err)
+  }
+  check(cur.Err())
+
+* Query One
+ใช้ method FindOne ซึ่งสามารถเรียก Decode ต่อได้เลย
+
+  err := collection.FindOne(ctx, bson.D{{"done", true}}).Decode(&result)
+  check(err)
+
+* Update
+ใช้ method UpdateOne หรือ UpdateMany
+
+  result, err := collection.UpdateMany(ctx, bson.D{{"done", false}},
+                                        bson.D{
+                                          {"$set",
+                                            bson.D{
+                                              {"done", true},
+                                            },
+                                          }
+                                        })
+
+* Delete
+ใช้ method DeleteOne หรือ DeleteMany
+  result, err := collection.UpdateMany(ctx, bson.D{{"done", true}})
+
+
+* Todo API LAB

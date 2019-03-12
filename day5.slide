@@ -1,0 +1,331 @@
+Go IO and Encoding
+
+วีรศักดิ์ ช่องงูเหลือม
+Senior Software Developer
+singpor@gmail.com
+https://medium.com/@iPorsut/
+@iporsut
+
+* package io
+- Abstract real I/O action to Interface
+- Have many functions for compose I/O action
+
+* Input from Reader
+  type Reader interface {
+          Read(p []byte) (n int, err error)
+  }
+
+* Output to Writer
+  type Writer interface {
+          Write(p []byte) (n int, err error)
+  }
+
+* Maybe Close a Closer
+  type Closer interface {
+          Close() error
+  }
+
+* Stardard I/O and Error
+  // *os.File => Reader, Writer and Closer
+  // package os
+  var (
+          Stdin  = NewFile(uintptr(syscall.Stdin), "/dev/stdin")
+          Stdout = NewFile(uintptr(syscall.Stdout), "/dev/stdout")
+          Stderr = NewFile(uintptr(syscall.Stderr), "/dev/stderr")
+  )
+
+* Copy from Reader to Writer
+
+  func Copy(dst Writer, src Reader) (written int64, err error)
+
+.play -edit day5-1-copy-example.go
+
+* Copy from os.Stdin to os.Stdout
+
+.play -edit day5-2-copy-in-to-out.go
+
+* LimitReader limit bytes to read
+
+  func LimitReader(r Reader, n int64) Reader
+
+.play -edit day5-3-limit-reader.go
+
+* MultiReader group multiple readers to one
+
+  func MultiReader(readers ...Reader) Reader
+
+.play -edit day5-4-multi-reader.go
+
+* MultiWriter group multiple writers to one
+
+  func MultiWriter(writers ...Writer) Writer
+
+.play -edit day5-5-multi-writer.go
+
+* SectionReader can set position to read or write #1
+
+  func NewSectionReader(r ReaderAt, off int64, n int64) *SectionReader
+
+.play -edit day5-6-read-at.go
+
+* SectionReader can set position to read or write #2
+
+.play -edit day5-7-seek.go
+
+* Pipe
+
+* io/ioutil
+
+* ReadAll from Reader
+
+  func ReadAll(r io.Reader) ([]byte, error)
+
+.play -edit day5-8-readall.go
+
+* ReadFile read from filename
+
+  func ReadFile(filename string) ([]byte, error)
+
+.play -edit day5-9-readfile.go
+
+* WriteFile write to filename
+
+  func WriteFile(filename string, data []byte, perm os.FileMode) error
+
+.play -edit day5-10-writefile.go
+
+* Discard is a Writer without doing anything
+
+.play -edit day5-11-discard.go
+
+* NopCloser addon Reader to ReadCloser
+
+  func NopCloser(r io.Reader) io.ReadCloser
+
+* strings
+
+* String Reader
+A Reader implements the io.Reader, io.ReaderAt, io.Seeker, io.WriterTo, io.ByteScanner, and io.RuneScanner interfaces by reading from a string. The zero value for Reader operates like a Reader of an empty string.
+
+* NewReader
+  func NewReader(s string) *Reader
+
+.play -edit day5-1-copy-example.go
+
+* String Builder
+A Builder is used to efficiently build a string using Write methods. It minimizes memory copying. The zero value is ready to use. Do not copy a non-zero Builder.
+
+.play -edit day5-12-string-builder.go
+
+* bytes
+
+* Byte Reader
+A Reader implements the io.Reader, io.ReaderAt, io.WriterTo, io.Seeker, io.ByteScanner, and io.RuneScanner interfaces by reading from a byte slice. Unlike a Buffer, a Reader is read-only and supports seeking. The zero value for Reader operates like a Reader of an empty slice.
+
+.play -edit day5-13-bytes-reader.go
+
+* Byte Buffer
+A Buffer is a variable-sized buffer of bytes with Read and Write methods. The zero value for Buffer is an empty buffer ready to use.
+
+.play -edit day5-14-bytes-buffer-writer.go
+
+* os
+
+* Open
+  func Open(name string) (*File, error)
+
+Open opens the named file for reading. If successful, methods on the returned file can be used for reading; the associated file descriptor has mode O_RDONLY. If there is an error, it will be of type *PathError.
+
+.play -edit day5-15-open-file.go /^func main/,/^}/
+
+* Create
+  func Create(name string) (*File, error)
+
+Create creates the named file with mode 0666 (before umask), truncating it if it already exists. If successful, methods on the returned File can be used for I/O; the associated file descriptor has mode O_RDWR. If there is an error, it will be of type *PathError.
+
+.play -edit day5-16-create-file.go /^func main/,/^}/
+
+* OpenFile #1
+  func OpenFile(name string, flag int, perm FileMode) (*File, error)
+
+OpenFile is the generalized open call; most users will use Open or Create instead. It opens the named file with specified flag (O_RDONLY etc.) and perm (before umask), if applicable. If successful, methods on the returned File can be used for I/O. If there is an error, it will be of type *PathError.
+
+* OpenFile #2
+  const (
+          // Exactly one of O_RDONLY, O_WRONLY, or O_RDWR must be specified.
+          O_RDONLY int = syscall.O_RDONLY // open the file read-only.
+          O_WRONLY int = syscall.O_WRONLY // open the file write-only.
+          O_RDWR   int = syscall.O_RDWR   // open the file read-write.
+          // The remaining values may be or'ed in to control behavior.
+          O_APPEND int = syscall.O_APPEND // append data to the file when writing.
+          O_CREATE int = syscall.O_CREAT  // create a new file if none exists.
+          O_EXCL   int = syscall.O_EXCL   // used with O_CREATE, file must not exist.
+          O_SYNC   int = syscall.O_SYNC   // open for synchronous I/O.
+          O_TRUNC  int = syscall.O_TRUNC  // truncate regular writable file when opened.
+  )
+
+* OpenFile #3
+.play -edit day5-17-open-file.go /^func main/,/^}/
+
+* Stat / Lstat #1
+  func Lstat(name string) (FileInfo, error)
+
+Lstat returns a FileInfo describing the named file. If the file is a symbolic link, the returned FileInfo describes the symbolic link. Lstat makes no attempt to follow the link. If there is an error, it will be of type *PathError.
+
+  func Stat(name string) (FileInfo, error)
+
+Stat returns a FileInfo describing the named file. If there is an error, it will be of type *PathError.
+
+* Stat / Lstat #2
+
+.play -edit day5-18-file-stat.go /^func main/,/^}/
+
+* os/exec
+
+* Command / CommandContext #1
+  func Command(name string, arg ...string) *Cmd
+
+  func CommandContext(ctx context.Context, name string, arg ...string) *Cmd
+
+ใช้สร้าง *exec.Cmd object เพื่อกำหนดว่าเราจะรันคำสั่งอะไร โดยมี arguments อะไรบ้าง พร้อมกำหนด context เพื่อควมคุม cancelation และ timeout ถ้าใช้ CommandContext
+
+หลังจากนั้นสามารถเรียก method Run เพื่อเริ่มให้โปรแกรมทำงาน
+
+.play -edit day5-19-command.go /^func main/,/^}/
+
+* Command / CommandContext #2
+
+.play -edit day5-20-command-context.go /^func main/,/^}/
+
+* Output
+  func (c *Cmd) Output() ([]byte, error)
+
+.play -edit day5-21-run-output.go /^func main/,/^}/
+
+* CombinedOutput
+  func (c *Cmd) CombinedOutput() ([]byte, error)
+
+.play -edit day5-22-run-combinedoutput.go /^func main/,/^}/
+
+* Start / Wait
+
+.play -edit day5-23-start-wait.go /^func main/,/^}/
+
+* encoding/json
+
+* MarshalJSON
+  type Marshaler interface {
+          MarshalJSON() ([]byte, error)
+  }
+
+* Marshal
+
+.play -edit day5-24-marshal-json.go /^func main/,/^}/
+
+* JSON Encoder #1
+  func NewEncoder(w io.Writer) *Encoder
+
+  func (enc *Encoder) Encode(v interface{}) error
+
+* JSON Encoder #2
+
+.play -edit day5-25-json-encoder.go /^func main/,/^}/
+
+* UnmarshalJSON
+  type Unmarshaler interface {
+          UnmarshalJSON([]byte) error
+  }
+
+* Unmarshal
+
+.play -edit day5-26-unmarshal-json.go /^func main/,/^}/
+
+* JSON Decoder #1
+  func NewDecoder(r io.Reader) *Decoder
+
+  func (dec *Decoder) Decode(v interface{}) error
+
+* JSON Decoder #2
+
+.play -edit day5-27-json-decoder.go /^func main/,/^}/
+
+* encoding/xml
+
+* MarshalXML
+  type Marshaler interface {
+          MarshalXML(e *Encoder, start StartElement) error
+  }
+
+* Marshal
+
+.play -edit day5-28-marshal-xml.go /^func main/,/^}/
+
+* XML Encoder #1
+  func NewEncoder(w io.Writer) *Encoder
+
+  func (enc *Encoder) Encode(v interface{}) error
+
+* XML Encoder #2
+
+.play -edit day5-29-xml-encoder.go /^func main/,/^}/
+
+* UnmarshalXML
+  type Unmarshaler interface {
+          UnmarshalXML(d *Decoder, start StartElement) error
+  }
+
+* Unmarshal
+
+.play -edit day5-30-unmarshal-xml.go /^func main/,/^}/
+
+* XML Decoder #1
+  func NewDecoder(r io.Reader) *Decoder
+
+  func (d *Decoder) Decode(v interface{}) error
+
+* XML Decoder #2
+
+.play -edit day5-31-xml-decoder.go /^func main/,/^}/
+
+* encoding/csv
+
+* CSV Reader #1
+  func NewReader(r io.Reader) *Reader
+
+  func (r *Reader) Read() (record []string, err error)
+  func (r *Reader) ReadAll() (records [][]string, err error)
+
+* CSV Reader #2
+
+.play -edit day5-32-csv-read.go /^func main/,/^}/
+
+* CSV Reader #3
+
+.play -edit day5-33-csv-readall.go /^func main/,/^}/
+
+* CSV Writer #1
+  func NewWriter(w io.Writer) *Writer
+
+  func (w *Writer) Write(record []string) error
+  func (w *Writer) WriteAll(records [][]string) error
+
+* CSV Writer #2
+
+.play -edit day5-34-csv-write.go /^func main/,/^}/
+
+* CSV Writer #3
+
+.play -edit day5-35-csv-writeall.go /^func main/,/^}/
+
+* Gin JWT Middleware
+.link  https://github.com/appleboy/gin-jwt https://github.com/appleboy/gin-jwt
+
+* HTTPS #1
+
+Generate Self Sign
+
+.link  https://letsencrypt.org/docs/certificates-for-localhost/ https://letsencrypt.org/docs/certificates-for-localhost/
+
+* HTTPS #2
+
+  r.RunTLS(":8080", "./testdata/server.pem", "./testdata/server.key")

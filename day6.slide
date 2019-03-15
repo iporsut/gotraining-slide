@@ -1,0 +1,229 @@
+Basic Docker and Kubenetes
+
+วีรศักดิ์ ช่องงูเหลือม
+Senior Software Developer
+singpor@gmail.com
+https://medium.com/@iPorsut/
+@iporsut
+
+* What is Container?
+.image docker-containerized-appliction-blue-border_2.png _ 730
+
+* What is Container?
+- Standardized packaging for software and dependencies
+- Isolate apps from each other
+- Share the same OS kernel
+- Works with all major Linux and Window Server
+
+* Virtual Machines
+.image container-vm-whatcontainer_2.png _ 730
+
+* Virtual Machines
+- One app per VM
+- Separate OS copy
+
+* Basic Docker
+
+* Images
+- A read-only template
+- Based on another image (e.g. base ubuntu, alpine, centos, golang)
+- We can build our image using Dockerfile
+
+* Containers
+- A runnable instance of an image
+- Create, Start, Stop, Move or Delete using docker CLI
+- Connect to networks, attach storage
+- Snapshot current state to new image
+
+* Docker architecture
+.image docker-architecture.svg _ 800
+
+* Run container from existing image
+
+  docker run hello-world
+
+* Basic Command
+
+  ## List Docker CLI commands
+  docker
+  docker container --help
+
+  ## Display Docker version and info
+  docker version
+  docker info
+
+  ## Execute Docker image
+  docker run hello-world
+
+  ## List Docker images
+  docker image ls
+
+  ## List Docker containers (running, all, all in quiet mode)
+  docker container ls
+
+* Run Nginx mapping port
+  docker run --rm --name nginx -p 8000:80 nginx
+
+* Run Nginx mapping volume
+  docker run --rm --name nginx -p 8000:80 -v $PWD/www:/usr/share/nginx/html nginx
+
+* Run MongoDB
+  docker run --rm --name mongodb -p 27017:27017 mongo
+
+* Run MongoDB mapping volume
+  docker run --rm --name mongodb -v $PWD/mongodata:/data/db -p 27017:27017 mongo
+
+* Run MySQL
+  docker run --rm --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password mysql
+
+* Build Image
+- เราสามารถสร้าง Docker Image ใหม่เองได้โดยอาศัย Image ที่มีอยู่แล้วเป็นฐาน (base)
+- โดยเขียน script ในการเตรียม image ผ่าน script Dockerfile
+- ใช้ docker build เพื่อ build image ใหม่ตาม Dockerfile ที่เตรียมไว้
+- สามารถ push image ขึ้น image repository ได้
+
+* Example Dockerfile
+- Dockerfile
+.code Dockerfile
+
+- Build Image
+
+  docker build -t myweb:latest .
+
+
+* Build Go App Image
+จะใช้ความสามารถ multi stage ของ Dockerfile ในการแบ่งเป็น Build Stage ออกมาเพื่อ build execute แล้วหลังจากนั้น COPY binary ที่ได้ไปใส่ image ใหม่ที่ใช้ base ที่มีขนาดเล็กกว่า
+
+* Build Go App Image
+.code -edit GoDockerfile
+
+* ทดลอง build image เผื่อรัน Todo App ผ่าน container
+
+* Docker Compose
+- ช่วยให้เราจัดการ การรัน containers หลายๆ containers พร้อมกัน แทนที่จะสั่ง docker run ทีละอัน
+- ใช้ไฟล์ docker-compose.yml ซึ่งเป็น config file format YAML
+- หลังจากนั้นเราสามารถสั่ง run containers ได้ผ่านคำสั่ง docker-compose up และ หยุดการทำงานด้วย docker-compose down
+
+* Basic Kubenetes
+
+* Kubenetes Cluster
+- คือ cluster ที่ประกอบไปด้วย Physical Node หรือ VM Node ซึ่งจะมี master node เป็นตัวจัดการงานต่างๆไปลง worker nodes ที่เหลือ
+- แต่ละโหลดจะถูกส่ง Pod ซึ่งเป็น Isolation Unit ของ K8S ในการนำไป deploy ในแต่ละ node ใน Pod ประกอบด้วย container ที่รันอยู่ได้มากกว่า 1 container
+- สามารถจัดกลุ่ม Pod ให้เป็น Service เพื่อจัดการเรื่อง replicate , rolling deployment และ load balancer
+
+* Minikube
+เป็นโปรแกรมที่ช่วยให้เราสร้าง K8S Cluster ในเครื่องของเราเอง ช่วยให้เราทดลอง deploy ในเครื่องได้
+
+* kubectl
+เป็นโปรแกรม conmmand line interface ที่ช่วยให้เราจัดการ cluster ได้ผ่านทาง command line
+
+* Workshop
+
+* start cluster
+  > minikube start
+  > minikube status
+
+  host: Running
+  kubelet: Running
+  apiserver: Running
+  kubectl: Correctly Configured: pointing to minikube-vm at 192.168.99.103
+
+* kubectl
+  > kubectl get pods
+
+* Deployment new pods from image
+  > kubectl run kubernetes-bootcamp --image=gcr.io/google-samples/kubernetes-bootcamp:v1 --port=8080
+  > kubectl get deployments
+  NAME                  READY   UP-TO-DATE   AVAILABLE   AGE
+  kubernetes-bootcamp   0/1     1            0           17s
+
+  > kubectl get pods
+  NAME                                   READY   STATUS    RESTARTS   AGE
+  kubernetes-bootcamp-6bf84cb898-lpfdj   1/1     Running   0          36s
+
+* Expose service for pods
+  > kubectl expose deployments/kubernetes-bootcamp --type="NodePort" --port 8080
+  > kubectl get services
+  NAME                  TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+  kubernetes            ClusterIP   10.96.0.1       <none>        443/TCP          9m22s
+  kubernetes-bootcamp   NodePort    10.101.201.41   <none>        8080:31917/TCP   23s
+
+  > minikube ip
+  192.168.99.103
+  > curl 192.168.99.103:31917
+  Hello Kubernetes bootcamp! | Running on: kubernetes-bootcamp-6bf84cb898-lpfdj | v=1
+
+* Scale deployments
+  > kubectl scale deployments/kubernetes-bootcamp --replicas=4
+  > kubectl get deployments
+  NAME                  READY   UP-TO-DATE   AVAILABLE   AGE
+  kubernetes-bootcamp   4/4     4            4           8m52s
+  > kubectl get pods -o wide
+  NAME                                   READY   STATUS    RESTARTS   AGE     IP           NODE       NOMINATED NODE   READINESS GATES
+  kubernetes-bootcamp-6bf84cb898-lpfdj   1/1     Running   0          9m32s   172.17.0.5   minikube   <none>           <none>
+  kubernetes-bootcamp-6bf84cb898-rfg26   1/1     Running   0          86s     172.17.0.8   minikube   <none>           <none>
+  kubernetes-bootcamp-6bf84cb898-s89cd   1/1     Running   0          86s     172.17.0.6   minikube   <none>           <none>
+  kubernetes-bootcamp-6bf84cb898-txpg2   1/1     Running   0          86s     172.17.0.7   minikube   <none>           <none>
+
+  > kubectl describe deployments/kubernetes-bootcamp
+  ...
+  Replicas:               4 desired | 4 updated | 4 total | 4 available | 0 unavailable
+  ...
+
+* Load Balancing
+  > curl 192.168.99.103:31917
+  Hello Kubernetes bootcamp! | Running on: kubernetes-bootcamp-6bf84cb898-lpfdj | v=1
+  > curl 192.168.99.103:31917
+  Hello Kubernetes bootcamp! | Running on: kubernetes-bootcamp-6bf84cb898-txpg2 | v=1
+  > curl 192.168.99.103:31917
+  Hello Kubernetes bootcamp! | Running on: kubernetes-bootcamp-6bf84cb898-rfg26 | v=1
+  > curl 192.168.99.103:31917
+  Hello Kubernetes bootcamp! | Running on: kubernetes-bootcamp-6bf84cb898-s89cd | v=1
+
+* Scale Down
+  > kubectl scale deployments/kubernetes-bootcamp --replicas=2
+  > kubectl get deployments
+  NAME                  READY   UP-TO-DATE   AVAILABLE   AGE
+  kubernetes-bootcamp   2/2     2            2           17m
+  > kubectl describe deployments/kubernetes-bootcamp
+  ...
+  Replicas:               2 desired | 2 updated | 2 total | 2 available | 0 unavailable
+  ...
+
+* Rolling Update
+  > kubectl set image deployments/kubernetes-bootcamp kubernetes-bootcamp=jocatalin/kubernetes-bootcamp:v2
+  > kubectl get pods
+  NAME                                   READY   STATUS        RESTARTS   AGE
+  kubernetes-bootcamp-5bf4d5689b-b2dtd   1/1     Running       0          22s
+  kubernetes-bootcamp-5bf4d5689b-fk7ll   1/1     Running       0          14s
+  kubernetes-bootcamp-6bf84cb898-lpfdj   1/1     Terminating   0          20m
+  kubernetes-bootcamp-6bf84cb898-s89cd   1/1     Terminating   0          12m
+
+  > kubectl rollout status deployments/kubernetes-bootcamp
+  deployment "kubernetes-bootcamp" successfully rolled out
+  > kubectl get pods
+  NAME                                   READY   STATUS    RESTARTS   AGE
+  kubernetes-bootcamp-5bf4d5689b-b2dtd   1/1     Running   0          77s
+  kubernetes-bootcamp-5bf4d5689b-fk7ll   1/1     Running   0          69s
+  > kubectl describe pods
+  ...
+  Containers:
+  kubernetes-bootcamp:
+    Container ID:   docker://3a575284f1503fe30ab70a29ad27816794b4aed8d70b17ca438a3bb783aa5de3
+    Image:          jocatalin/kubernetes-bootcamp:v2
+  ...
+
+* Rollback an update
+  > kubectl set image deployments/kubernetes-bootcamp kubernetes-bootcamp=gcr.io/google-samples/kubernetes-bootcamp:v10
+  > kubectl get pods
+  NAME                                   READY   STATUS             RESTARTS   AGE
+  kubernetes-bootcamp-597cfc5b76-khvl2   0/1     ImagePullBackOff   0          2m52s
+  kubernetes-bootcamp-5bf4d5689b-b2dtd   1/1     Running            0          10m
+  kubernetes-bootcamp-5bf4d5689b-fk7ll   1/1     Running            0          10m
+
+  > kubectl rollout undo deployments/kubernetes-bootcamp
+  deployment.extensions/kubernetes-bootcamp rolled back
+  > kubectl get pods
+  NAME                                   READY   STATUS    RESTARTS   AGE
+  kubernetes-bootcamp-5bf4d5689b-b2dtd   1/1     Running   0          11m
+  kubernetes-bootcamp-5bf4d5689b-fk7ll   1/1     Running   0          11m

@@ -1,0 +1,295 @@
+Testing with Go
+
+วีรศักดิ์ ช่องงูเหลือม
+Senior Software Developer
+singpor@gmail.com
+https://medium.com/@iPorsut/
+@iporsut
+
+* Automate Testing
+- คือการทดสอบการทำงานของโค้ดที่เราเขียน ผ่านการเขียนโค้ดไปเรียกใช้งาน
+
+* ประโยชน์ของ Automate Testing
+- เราไม่จำเป็นต้องทดสอบ manual เองทุกครั้ง สามารถรันผ่านเทสที่เขียนไว้ได้เลย
+- เราสามารถรันการทดสอบได้ซ้ำๆ ทุกครั้งเมื่อมีการแก้ไขเพื่อยืนยันความถูกต้องเดิม (regression)
+- เราสามารถทดสอบบางส่วนของโปรแกรมได้ โดยที่ไม่ต้อง compile แล้วรันทั้งโปรแกรม
+- ในบางครั้ง โค้ดในส่วนการทดสอบ สามารถทำตัวเป็นเอกสาร ตัวอย่างการใช้งาน function หรือ method ช่วยให้คนที่เข้ามาใหม่ในทีม เข้าใจการทำงานได้ง่ายขึ้นอีกด้วย
+
+* Testing template
+  > mkdir calc
+  > go mod init calc
+
+New file calc_test.go
+
+.code -edit day7_testing_template.go
+
+* Run test
+  > go test
+
+* Implement Add
+
+New file calc.go
+
+.code -edit day7_implement_add.go
+
+* Exercise
+
+ลองเขียน functions ให้ package calc อีก 3 functions
+
+  > func Sub(a, b int) int
+  > func Mul(a, b int) int
+  > func Div(a, b int) int
+
+โดยเขียน Test function สำหรับ 3 ฟังก์ชันนี้ด้วย
+
+  > func TestSub(t *testing.T)
+  > func TestMul(t *testing.T)
+  > func TestDiv(t *testing.T)
+
+* testify
+
+- เป็น packages ที่ช่วยให้เราเขียนเทสได้ง่ายขึ้นกว่าใช้ testing ตรงๆ
+- testify มี 4 packages ย่อยๆให้เราใช้งาน
+
+  github.com/stretchr/testify/assert
+  github.com/stretchr/testify/require
+  github.com/stretchr/testify/mock
+  github.com/stretchr/testify/suite
+
+* Test Add func with testify/assert
+
+.code -edit day7_testify_assert_add_func.go
+
+* Exercise Test FizzBuzz with testify
+
+> mkdir fizzbuzz
+> cd fizzbuzz
+> go mod fizzbuzz
+
+New file fizzbuzz_test.go
+
+  func Say(n int) string
+
+Test Say function
+
+  func TestSay(t *testing.T)
+
+* Example Test
+- หน้าที่หลักคือเป็น example code ใน document เช่นเดียวกับที่เราเห็น example ใน document ของ package ต่างๆ
+- และยังสามารถทดสอบ output ที่ออกไปที่ standard output ได้อีกด้วย
+
+* Example of Example Test
+
+.code -edit day7_example_of_example_test.go
+
+* Sub Tests
+- ช่วยให้เราจับรวมการทดสอบหลายๆการทดสอบมาไว้ด้วยกัน
+- สำหรับเทสที่แชร์ค่า setup ร่วมกันทำให้จัดการการ setup ได้ง่ายกว่า
+
+.code -edit day7_sub_test.go /func TestCalc/,/^}/
+
+* Table test
+- ในกรณีที่เราต้องการทดสอบฟังก์ชันเดียว กับข้อมูลหลายๆเคส เราสามารถใช้ท่า Table test ได้โดยจับข้อมูลแต่ละเคสเก็บไว้ใน slice แล้ววนลูปเรียกเทสในแต่ละเทส
+
+.code -edit day7_table_test.go /^func TestAdd/,/^}/
+
+* Table test with sub test
+- เราสามารถใช้ sub test ร่วมกับ table test เพื่อ custom ชื่อเทสตาม sub test ได้
+
+.code -edit day7_table_sub_test.go /^func TestAdd/,/^}/
+
+* Testing HTTP Handler
+- การทดสอบ HTTP Handler หลักๆคือ ทดลองเรียก Handler Function โดยการส่ง http.Request แล้วจึงเอา http.Response มาเช็คว่าเป็นไปตามที่คาดหวังหรือไม่
+- Go มี package httptest เพื่อช่วยสร้าง Request สำหรับ test , มี ResponseRecorder เพื่อช่วยในการเช็ค response และ มี Server เพื่อ Start HTTP server สำหรับเทสโดยเฉพาะ
+
+* Example HTTP Test
+
+.code -edit day7_example_http_test.go /^func TestAddHandler/,/^}/
+
+* Use httptest.NewServer
+- อีกวิธีในการทดสอบคือสร้าง NewServer ขึ้นมาแล้วใช้ http.Client ทดสอบเรียกจริงๆไปที่ test server นี้ได้
+
+.code -edit day7_example_test_server.go /^func TestSubHandler/,/^}/
+
+* Test HTTP Router
+- เวลาเราใช้ http.Handle หรือ http.HandleFunc เพื่อ mapping path กับ Handler จริงๆแล้วเป็น feature ของ type http.ServeMux ในการ routing จาก request ไปหา Handler ที่ถูกต้อง
+- ซึ่ง function http.Handle กับ http.HandleFunc จะใช้ตัวแปร http.DefaultServeMux ในการเก็บการ mapping
+- ตัว type ServeMux เองก็ implement interface http.Handler ไว้เช่นกัน
+
+  type Handler interface {
+          ServeHTTP(ResponseWriter, *Request)
+  }
+
+- ดังนั้นเราสามารถทดสอบ Handler ที่ map router โดยฟังก์ชัน http.Handle หรือ http.HandleFunc ได้ด้วย httptest.NewServer
+
+* Test HTTP Router #2
+
+.code -edit day7_test_http_router.go /^func SetRouter/,/^}/
+
+* Test HTTP Router #3
+.code -edit day7_test_http_router.go /^func TestAddRouter/,/^}/
+
+* Excercise HTTP Router
+- เขียน Test HTTP Router สำหรับ
+
+  /sub/?a=10&b=20
+  /mul/?a=20&b=20
+  /div/?a=100&b=20
+
+* Testing Gin Handler
+- เนื่องจาก *gin.Engine implements http.Handler ดังนั้นเราจึงสามารถเทส gin ได้ผ่านทาง httptest.Server เช่นกัน
+- เราสามารถเอา ใช้ httptest.ResponseRecorder และ httptest.Request ก็ได้โดยเรียก method ServeHTTP ของ *gin.Engine
+
+* Test Gin Handler
+
+.code -edit day7_test_gin_handler.go /^func TestAddGinHandler/,/^}/
+
+* Test Gin Router #1
+
+.code -edit day7_test_gin_router.go /^func SetGinRouter/,/^}/
+
+* Test Gin Router #2
+
+.code -edit day7_test_gin_router.go /^func TestAddGinRouter/,/^}/
+
+* Testing Logic that depends Database Operation
+- เราสามารถเขียนโค้ดเทสส่วนที่ขึ้นอยู่กับ database ได้โดยเชื่อมต่อ database จริงๆ
+- หรือใช้วิธีการแยกส่วนที่เป็น Database Operation ออกเป็น interface แล้วใช้วิธี implements Mock DB Operations
+- แล้ว Refactor โค้ดให้ depend กับ interface แทนที่จะใช้งานผ่าน package DB driver โดยตรง
+
+* Define Interface for Database Operation
+
+.code -edit day7_test_db_interface.go /^type Service/,/^}/
+
+* Handler Depends Interface for DB Operation #1
+  type Handler struct {
+  	Service Service
+  }
+  func (h *Handler) AddHandler() gin.HandlerFunc {
+  	return h.wrapError(func(c *gin.Context) error {
+  		todo := &TodoList{
+  			Tasks: []Task{},
+  		}
+  		if err := c.Bind(todo); err != nil {
+  			return err
+  		}
+  		todo, err := h.Service.Add(c.Request.Context(), todo)
+  		if err != nil {
+  			return err
+  		}
+  		c.JSON(http.StatusOK, todo)
+  		return nil
+  	})
+  }
+
+* Implement Service for MongoDB
+
+  type TodoList struct {
+  	C *mongo.Collection
+  }
+
+  func (s *TodoList) Add(ctx context.Context, todo *todo.TodoList) (*todo.TodoList, error) {
+  	result, err := s.C.InsertOne(ctx, todo)
+  	if err != nil {
+  		return nil, err
+  	}
+  	todo.ID = result.InsertedID.(primitive.ObjectID)
+  	return todo, nil
+  }
+
+* Composing it in main function
+  func main() {
+  	ctx := context.Background()
+  	client, err := mongo.Connect(ctx, options.Client().ApplyURI(os.Getenv("DATABASE_URL")))
+  	if err != nil {
+  		log.Println(err)
+  		os.Exit(1)
+  	}
+  	if err := client.Ping(context.Background(), nil); err != nil {
+  		log.Println(err)
+  		os.Exit(1)
+  	}
+  	coll := client.Database(os.Getenv("DATABASE_NAME")).Collection("todos")
+  	handler := &todo.Handler{
+  		Service: &mongoservice.TodoList{
+  			C: coll,
+  		},
+  	}
+
+  	r := gin.Default()
+
+  	r.POST("/todos", handler.AddHandler())
+  	r.Run(":8000")
+  }
+
+* Test Handler with Mock/Fake/Stub Implementation #1
+  type TestService struct {
+  	oid primitive.ObjectID
+  	err error
+  }
+
+  func (s *TestService) Add(ctx context.Context, todo *TodoList) (*TodoList, error) {
+  	todo.ID = s.oid
+  	return todo, s.err
+  }
+
+* Test Handler with Mock/Fake/Stub Implementation #2
+
+  func TestAddHandler(t *testing.T) {
+  	gin.SetMode(gin.ReleaseMode)
+  	oid := primitive.NewObjectID()
+  	h := &Handler{
+  		Service: &TestService{
+  			oid: oid,
+  		},
+  	}
+  	r := gin.New()
+  	r.POST("/todos", h.AddHandler())
+  	req := httptest.NewRequest(http.MethodPost, "https://test.com/todos",
+  		strings.NewReader(`{"title": "List 1"}`))
+  	req.Header.Set("Content-Type", "application/json")
+  	w := httptest.NewRecorder()
+  	r.ServeHTTP(w, req)
+  	resp := w.Result()
+  	defer resp.Body.Close()
+  	b, _ := ioutil.ReadAll(resp.Body)
+  	assert.Equal(t, http.StatusOK, resp.StatusCode)
+  	assert.Equal(t, "application/json; charset=utf-8", resp.Header.Get("Content-Type"))
+  	assert.Equal(t, fmt.Sprintf(`{"id":"%s","title":"List 1","tasks":[]}`, oid.Hex()), string(b))
+  }
+
+
+* Benchmark testing #1
+
+ถ้าเรามีโค้ดอยู่แบบนี้
+
+  func Fib(n int) int {
+  	if n < 2 {
+  		return n
+  	}
+  	return Fib(n-1) + Fib(n-2)
+  }
+
+แล้วถ้าอยากวัดประสิทธิภาพการทำงาน ใช้เวลานานแค่ไหน ใช้ CPU/Memory ประมาณเท่าไหร่ในการทำงาน function นี้ เราจะใช้ Benchmark testing เข้าช่วย
+
+* Benchmark testing #2
+
+  func BenchmarkFib10(b *testing.B) {
+  	// run the Fib function b.N times
+  	for n := 0; n < b.N; n++ {
+  		Fib(10)
+  	}
+  }
+
+ตอนรันให้ใช้ go test พร้อม option แบบนี้
+
+  go test -run=^Benchmark -bench=.
+
+* Benchmark result
+
+  goos: darwin
+  goarch: amd64
+  pkg: github.com/iporsut/calc
+  BenchmarkFib10-4   	 3000000	       424 ns/op
+  PASS
+  ok  	github.com/iporsut/calc	1.747s
